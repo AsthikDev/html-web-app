@@ -654,12 +654,40 @@
     renderMessages();
   }
 
-  gateForm.addEventListener("submit", (e) => {
+  const gateSubmitBtn = document.getElementById("gate-submit");
+
+  gateForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const code = gateInput.value.trim();
     if (!code) return;
-    localStorage.setItem(CODE_KEY, code);
-    showApp();
+
+    gateError.textContent = "";
+    gateSubmitBtn.disabled = true;
+    const originalLabel = gateSubmitBtn.textContent;
+    gateSubmitBtn.textContent = "Checking...";
+
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-access-code": code },
+        body: JSON.stringify({}),
+      });
+      if (res.status === 401) {
+        gateError.textContent = "Incorrect access code.";
+        gateInput.value = "";
+        gateInput.focus();
+        return;
+      }
+      // Any non-401 response (including 400 for the deliberately empty body)
+      // means the access code itself was accepted.
+      localStorage.setItem(CODE_KEY, code);
+      showApp();
+    } catch {
+      gateError.textContent = "Couldn't reach the server. Check your connection and try again.";
+    } finally {
+      gateSubmitBtn.disabled = false;
+      gateSubmitBtn.textContent = originalLabel;
+    }
   });
 
   // Initial boot: if we have a stored code, try the app straight away.
