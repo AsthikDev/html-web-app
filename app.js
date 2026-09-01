@@ -169,7 +169,7 @@
     if (!chat || chat.messages.length === 0) {
       const empty = document.createElement("div");
       empty.className = "empty-state";
-      empty.innerHTML = `<h2>What can I help with?</h2><div class="suggestions"></div>`;
+      empty.innerHTML = `<div class="empty-mark">${ICON_ASSISTANT}</div><h2>What can I help with?</h2><div class="suggestions"></div>`;
       const suggestionsEl = empty.querySelector(".suggestions");
       for (const s of SUGGESTIONS) {
         const chip = document.createElement("button");

@@ -1,6 +1,6 @@
-# asthikambalapadi.in — Claude chat
+# asthikambalapadi.in — Prism
 
-A minimal Claude chat UI (`index.html` / `style.css` / `app.js`), served
+A minimal Claude-backed chat UI (`index.html` / `style.css` / `app.js`), served
 statically via GitHub Pages, backed by a Cloudflare Worker (`/worker`) that
 holds the Anthropic API key server-side and proxies streaming responses.
 
