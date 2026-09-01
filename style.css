@@ -142,7 +142,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .gate-mark {
   width: 38px;
   height: 38px;
-  border-radius: var(--radius-md);
+  border-radius: 50%;
   background: var(--accent);
   color: var(--accent-text);
   display: flex;
@@ -210,9 +210,9 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   padding: 6px 6px 14px;
 }
 .brand-mark {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-sm);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
   background: var(--accent);
   color: var(--accent-text);
   display: flex;
@@ -220,6 +220,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   justify-content: center;
   font-size: 0.8rem;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px var(--accent-glow);
 }
 .brand-name { font-weight: 600; font-size: 0.9rem; letter-spacing: -0.015em; }
 
@@ -493,7 +494,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .empty-mark {
   width: 44px;
   height: 44px;
-  border-radius: var(--radius-md);
+  border-radius: 50%;
   background: var(--accent);
   color: var(--accent-text);
   display: flex;
@@ -554,18 +555,20 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   flex-shrink: 0;
   width: 26px;
   height: 26px;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.85rem;
   font-weight: 600;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 .avatar.assistant {
   background: var(--accent);
   color: var(--accent-text);
   border-color: transparent;
+  box-shadow: 0 2px 8px var(--accent-glow);
 }
 .avatar.user {
   background: var(--bg-hover);
@@ -763,7 +766,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   width: 30px;
   height: 30px;
   margin-left: 4px;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   border: 1px solid transparent;
   background: var(--accent);
   color: var(--accent-text);
@@ -771,11 +774,12 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 8px var(--accent-glow);
   transition: background 0.12s var(--ease), box-shadow 0.12s var(--ease), transform 0.12s var(--ease);
 }
 .composer button#send:hover:not(:disabled) {
   background: var(--accent-hover);
-  box-shadow: 0 3px 12px var(--accent-glow);
+  box-shadow: 0 3px 14px var(--accent-glow);
   transform: translateY(-1px);
 }
 .composer button#send:disabled { opacity: 0.4; cursor: default; }
