@@ -380,6 +380,18 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 30%, transparent 85%);
   mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 30%, transparent 85%);
 }
+.empty-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.empty-mark svg { width: 22px; height: 22px; }
 .empty-state h2 {
   color: var(--text);
   font-weight: 600;
