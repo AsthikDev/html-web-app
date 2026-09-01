@@ -1,4 +1,4 @@
-# asthikambalapadi.in — Prism
+# asthikambalapadi.in — Asthik
 
 A minimal Claude-backed chat UI (`index.html` / `style.css` / `app.js`), served
 statically via GitHub Pages, backed by a Cloudflare Worker (`/worker`) that
