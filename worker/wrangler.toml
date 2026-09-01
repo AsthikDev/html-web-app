@@ -1,0 +1,10 @@
+name = "claude-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-08-01"
+
+# Set via `wrangler secret put`, never committed here:
+#   ANTHROPIC_API_KEY  - your Claude API key
+#   ACCESS_CODE        - the passphrase the chat UI must send
+
+[vars]
+ALLOWED_ORIGIN = "https://asthikambalapadi.in"
