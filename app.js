@@ -2,6 +2,7 @@
   const WORKER_URL = window.CLAUDE_WORKER_URL;
   const CODE_KEY = "claude_access_code";
   const CHATS_KEY = "claude_chats_v1";
+  const EFFORT_KEY = "claude_effort";
 
   const gate = document.getElementById("gate");
   const gateForm = document.getElementById("gate-form");
@@ -15,10 +16,78 @@
   const newChatBtn = document.getElementById("new-chat");
   const historyList = document.getElementById("history-list");
   const logoutBtn = document.getElementById("logout");
+  const sidebar = document.getElementById("sidebar");
+  const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+  const menuToggle = document.getElementById("menu-toggle");
+  const effortSelect = document.getElementById("effort-select");
+  const effortBtns = effortSelect ? [...effortSelect.querySelectorAll(".effort-btn")] : [];
+  const themeToggle = document.getElementById("theme-toggle");
+  const THEME_KEY = "claude_theme";
+
+  const ICON_ASSISTANT = `<svg viewBox="0 0 24 24" width="15" height="15"><path fill="currentColor" d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>`;
+  const ICON_USER = `<svg viewBox="0 0 24 24" width="15" height="15"><path fill="currentColor" d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.8-3.6-5-8-5z"/></svg>`;
+  const ICON_COPY = `<svg viewBox="0 0 24 24" width="13" height="13"><path fill="currentColor" d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>`;
+  const ICON_CHECK = `<svg viewBox="0 0 24 24" width="13" height="13"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>`;
+
+  function applyTheme(theme) {
+    if (theme === "light" || theme === "dark") {
+      document.documentElement.dataset.theme = theme;
+    } else {
+      delete document.documentElement.dataset.theme;
+    }
+  }
+
+  function systemPrefersDark() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  applyTheme(localStorage.getItem(THEME_KEY));
+
+  themeToggle?.addEventListener("click", () => {
+    const current = document.documentElement.dataset.theme || (systemPrefersDark() ? "dark" : "light");
+    const next = current === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+  });
+
+  const SUGGESTIONS = [
+    "Explain a concept simply",
+    "Draft an email",
+    "Debug some code",
+    "Brainstorm ideas",
+  ];
 
   let chats = loadChats();
   let activeChatId = chats.length ? chats[0].id : null;
   let streaming = false;
+
+  function getEffort() {
+    const stored = localStorage.getItem(EFFORT_KEY);
+    return stored === "low" || stored === "medium" || stored === "high" ? stored : "high";
+  }
+
+  function setEffort(effort) {
+    localStorage.setItem(EFFORT_KEY, effort);
+    for (const btn of effortBtns) {
+      btn.classList.toggle("active", btn.dataset.effort === effort);
+    }
+  }
+
+  for (const btn of effortBtns) {
+    btn.addEventListener("click", () => setEffort(btn.dataset.effort));
+  }
+  setEffort(getEffort());
+
+  function closeSidebar() {
+    sidebar?.classList.remove("open");
+    sidebarBackdrop?.classList.remove("open");
+  }
+
+  menuToggle?.addEventListener("click", () => {
+    sidebar?.classList.toggle("open");
+    sidebarBackdrop?.classList.toggle("open");
+  });
+  sidebarBackdrop?.addEventListener("click", closeSidebar);
 
   function loadChats() {
     try {
@@ -55,6 +124,7 @@
         activeChatId = chat.id;
         renderHistory();
         renderMessages();
+        closeSidebar();
       });
       historyList.appendChild(item);
     }
@@ -97,11 +167,24 @@
     const chat = activeChat();
     messagesEl.innerHTML = "";
     if (!chat || chat.messages.length === 0) {
-      messagesEl.innerHTML = `<div class="empty-state"><h2>What can I help with?</h2></div>`;
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.innerHTML = `<h2>What can I help with?</h2><div class="suggestions"></div>`;
+      const suggestionsEl = empty.querySelector(".suggestions");
+      for (const s of SUGGESTIONS) {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "suggestion-chip";
+        chip.textContent = s;
+        chip.addEventListener("click", () => sendMessage(s));
+        suggestionsEl.appendChild(chip);
+      }
+      messagesEl.appendChild(empty);
       return;
     }
     for (const msg of chat.messages) {
-      appendBubble(msg.role, msg.content);
+      const bubble = appendBubble(msg.role, msg.content);
+      if (msg.role === "assistant") enhanceCodeBlocks(bubble);
     }
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
@@ -109,15 +192,64 @@
   function appendBubble(role, content) {
     const emptyState = messagesEl.querySelector(".empty-state");
     if (emptyState) emptyState.remove();
+
     const row = document.createElement("div");
     row.className = "msg-row " + role;
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar " + role;
+    avatar.innerHTML = role === "user" ? ICON_USER : ICON_ASSISTANT;
+
+    const bubbleCol = document.createElement("div");
+    bubbleCol.className = "bubble-col";
+
     const bubble = document.createElement("div");
     bubble.className = "bubble";
+    bubble.dataset.raw = content;
     bubble.innerHTML = renderMarkdown(content);
-    row.appendChild(bubble);
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "msg-toolbar";
+    const copyMsgBtn = document.createElement("button");
+    copyMsgBtn.type = "button";
+    copyMsgBtn.innerHTML = ICON_COPY + "<span>Copy</span>";
+    copyMsgBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(bubble.dataset.raw || bubble.textContent).then(() => {
+        copyMsgBtn.innerHTML = ICON_CHECK + "<span>Copied</span>";
+        setTimeout(() => (copyMsgBtn.innerHTML = ICON_COPY + "<span>Copy</span>"), 1500);
+      });
+    });
+    toolbar.appendChild(copyMsgBtn);
+
+    bubbleCol.appendChild(bubble);
+    bubbleCol.appendChild(toolbar);
+    row.appendChild(avatar);
+    row.appendChild(bubbleCol);
     messagesEl.appendChild(row);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return bubble;
+  }
+
+  function enhanceCodeBlocks(container) {
+    container.querySelectorAll("pre").forEach((pre) => {
+      if (pre.dataset.enhanced) return;
+      pre.dataset.enhanced = "1";
+      const codeEl = pre.querySelector("code");
+      if (!codeEl) return;
+      const langMatch = codeEl.className.match(/lang-(\w+)/);
+      const lang = langMatch ? langMatch[1] : "code";
+      const header = document.createElement("div");
+      header.className = "code-header";
+      header.innerHTML = `<span>${lang}</span><button type="button" class="copy-btn">${ICON_COPY}<span>Copy</span></button>`;
+      pre.prepend(header);
+      header.querySelector(".copy-btn").addEventListener("click", () => {
+        navigator.clipboard.writeText(codeEl.textContent).then(() => {
+          const btn = header.querySelector(".copy-btn");
+          btn.innerHTML = ICON_CHECK + "<span>Copied</span>";
+          setTimeout(() => (btn.innerHTML = ICON_COPY + "<span>Copy</span>"), 1500);
+        });
+      });
+    });
   }
 
   function autoTitle(chat) {
@@ -154,6 +286,7 @@
         },
         body: JSON.stringify({
           messages: chat.messages.map((m) => ({ role: m.role, content: m.content })),
+          effort: getEffort(),
         }),
       });
 
@@ -190,6 +323,7 @@
           }
           if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
             assistantText += evt.delta.text;
+            assistantBubble.dataset.raw = assistantText;
             assistantBubble.innerHTML = renderMarkdown(assistantText);
             messagesEl.scrollTop = messagesEl.scrollHeight;
           } else if (evt.type === "error") {
@@ -201,6 +335,7 @@
       if (!assistantText) assistantText = "(empty response)";
       chat.messages.push({ role: "assistant", content: assistantText });
       saveChats();
+      enhanceCodeBlocks(assistantBubble);
     } catch (err) {
       assistantBubble.innerHTML = `<span class="error-bubble">${(err && err.message) || "Something went wrong."}</span>`;
     } finally {
@@ -230,7 +365,10 @@
     input.style.height = Math.min(input.scrollHeight, 200) + "px";
   });
 
-  newChatBtn.addEventListener("click", newChat);
+  newChatBtn.addEventListener("click", () => {
+    newChat();
+    closeSidebar();
+  });
 
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem(CODE_KEY);

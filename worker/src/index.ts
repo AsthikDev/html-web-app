@@ -36,7 +36,7 @@ export default {
       return new Response("Unauthorized", { status: 401, headers: cors });
     }
 
-    let body: { messages: Anthropic.MessageParam[] };
+    let body: { messages: Anthropic.MessageParam[]; effort?: string };
     try {
       body = await request.json();
     } catch {
@@ -47,6 +47,8 @@ export default {
       return new Response("messages required", { status: 400, headers: cors });
     }
 
+    const effort = body.effort === "low" || body.effort === "medium" ? body.effort : "high";
+
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
 
     let stream: ReturnType<typeof client.messages.stream>;
@@ -56,6 +58,8 @@ export default {
         max_tokens: MAX_TOKENS,
         system: SYSTEM_PROMPT,
         messages: body.messages,
+        thinking: { type: "adaptive" },
+        output_config: { effort },
       });
     } catch (err) {
       return new Response("Failed to start stream", { status: 502, headers: cors });
