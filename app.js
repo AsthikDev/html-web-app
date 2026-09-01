@@ -603,7 +603,7 @@
     if (!chat || !chat.messages.length) return;
     const lines = [`# ${chat.title || "Chat"}`, ""];
     for (const m of chat.messages) {
-      lines.push(m.role === "user" ? "**You:**" : "**Prism:**", "", m.content, "");
+      lines.push(m.role === "user" ? "**You:**" : "**Asthik:**", "", m.content, "");
     }
     const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
