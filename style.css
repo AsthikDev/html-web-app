@@ -3,7 +3,7 @@
   --bg-sidebar: #fafafa;
   --bg-bubble-user: #f2f2f3;
   --bg-raised: #ffffff;
-  --bg-hover: #f2f2f3;
+  --bg-hover: #e9e9eb;
   --text: #0a0a0a;
   --text-dim: #6f6f75;
   --border: rgba(10, 10, 10, 0.1);
@@ -30,7 +30,7 @@
     --bg-sidebar: #0d0d0f;
     --bg-bubble-user: #1a1a1d;
     --bg-raised: #131315;
-    --bg-hover: #1a1a1d;
+    --bg-hover: #27272b;
     --text: #f2f2f3;
     --text-dim: #8b8b91;
     --border: rgba(255, 255, 255, 0.09);
@@ -53,7 +53,7 @@
   --bg-sidebar: #0d0d0f;
   --bg-bubble-user: #1a1a1d;
   --bg-raised: #131315;
-  --bg-hover: #1a1a1d;
+  --bg-hover: #27272b;
   --text: #f2f2f3;
   --text-dim: #8b8b91;
   --border: rgba(255, 255, 255, 0.09);
@@ -236,11 +236,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   cursor: pointer;
   font-size: 0.85rem;
   text-align: left;
-  transition: background 0.12s var(--ease), border-color 0.12s var(--ease);
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease), transform 0.12s var(--ease), box-shadow 0.12s var(--ease);
 }
 .new-chat-btn svg, .logout-btn svg { flex-shrink: 0; opacity: 0.7; }
-.new-chat-btn:hover, .logout-btn:hover { background: var(--bg-hover); border-color: var(--border-strong); }
-.new-chat-btn:active, .logout-btn:active { background: var(--border); }
+.new-chat-btn:hover, .logout-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.new-chat-btn:active, .logout-btn:active { background: var(--border); transform: translateY(0); box-shadow: none; }
 .logout-btn.danger:hover { border-color: #e5484d; color: #e5484d; }
 .logout-btn.danger:hover svg { color: #e5484d; opacity: 1; }
 
@@ -282,15 +287,15 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 7px 6px 7px 12px;
+  padding: 8px 6px 8px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.83rem;
   color: var(--text-dim);
   cursor: pointer;
   border-left: 2px solid transparent;
-  transition: background 0.12s var(--ease), color 0.12s var(--ease), border-color 0.12s var(--ease);
+  transition: background 0.12s var(--ease), color 0.12s var(--ease), border-color 0.12s var(--ease), box-shadow 0.12s var(--ease);
 }
-.history-item:hover { background: var(--bg-hover); color: var(--text); }
+.history-item:hover { background: var(--bg-hover); color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
 .history-item.active { background: var(--bg-hover); color: var(--text); border-left-color: var(--accent); }
 .history-item-title {
   flex: 1;
@@ -309,7 +314,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 }
 .history-item-actions {
   display: flex;
-  gap: 1px;
+  gap: 2px;
   opacity: 0;
   flex-shrink: 0;
   transition: opacity 0.12s var(--ease);
@@ -319,16 +324,23 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  border: none;
+  width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-dim);
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: background 0.1s var(--ease), color 0.1s var(--ease), border-color 0.1s var(--ease), transform 0.1s var(--ease);
 }
-.history-item-actions button:hover { background: var(--border); color: var(--text); }
-.history-item-actions button.danger:hover { color: #e5484d; }
+.history-item-actions button svg { width: 14px; height: 14px; }
+.history-item-actions button:hover {
+  background: var(--border-strong);
+  border-color: var(--border-strong);
+  color: var(--text);
+  transform: scale(1.08);
+}
+.history-item-actions button.danger:hover { color: #e5484d; border-color: #e5484d; }
 
 .main {
   flex: 1;
@@ -359,7 +371,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   cursor: pointer;
   transition: background 0.12s var(--ease), border-color 0.12s var(--ease);
 }
-.icon-btn:hover { background: var(--bg-hover); border-color: var(--border); }
+.icon-btn:hover { background: var(--bg-hover); border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
 
 .topbar-right {
   display: flex;
@@ -379,9 +391,14 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   background: var(--bg-raised);
   color: var(--text);
   cursor: pointer;
-  transition: background 0.12s var(--ease), border-color 0.12s var(--ease);
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease), transform 0.12s var(--ease), box-shadow 0.12s var(--ease);
 }
-.theme-toggle:hover { background: var(--bg-hover); border-color: var(--border-strong); }
+.theme-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px) rotate(-8deg);
+  box-shadow: var(--shadow-md);
+}
 .theme-toggle .icon-moon { display: none; }
 :root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
@@ -507,9 +524,15 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   border-radius: var(--radius-md);
   font-size: 0.83rem;
   cursor: pointer;
-  transition: border-color 0.12s var(--ease), background 0.12s var(--ease);
+  transition: border-color 0.12s var(--ease), background 0.12s var(--ease), transform 0.12s var(--ease), box-shadow 0.12s var(--ease);
 }
-.suggestion-chip:hover { border-color: var(--accent); background: var(--accent-wash); }
+.suggestion-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.suggestion-chip:active { transform: translateY(0); box-shadow: none; }
 
 .msg-row {
   max-width: 760px;
@@ -627,16 +650,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   display: flex;
   align-items: center;
   gap: 5px;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-dim);
   font-size: 0.72rem;
   padding: 3px 7px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.12s var(--ease), color 0.12s var(--ease);
+  transition: background 0.12s var(--ease), color 0.12s var(--ease), border-color 0.12s var(--ease);
 }
-.copy-btn:hover { background: var(--border); color: var(--text); }
+.copy-btn:hover { background: var(--border-strong); color: var(--text); }
 
 .msg-toolbar {
   display: flex;
@@ -658,7 +681,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   cursor: pointer;
   transition: background 0.12s var(--ease), color 0.12s var(--ease);
 }
-.msg-toolbar button:hover { background: var(--bg-hover); color: var(--text); }
+.msg-toolbar button:hover { background: var(--border-strong); color: var(--text); }
 
 .typing-dot {
   display: inline-block;
@@ -738,7 +761,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   cursor: pointer;
   transition: background 0.12s var(--ease), color 0.12s var(--ease);
 }
-.composer-tool:hover { background: var(--bg-hover); color: var(--text); }
+.composer-tool:hover { background: var(--border-strong); color: var(--text); }
 .composer button#send {
   flex-shrink: 0;
   width: 38px;
