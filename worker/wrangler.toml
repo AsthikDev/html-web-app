@@ -1,6 +1,7 @@
 name = "claude-proxy"
 main = "src/index.ts"
 compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
 
 # Set via `wrangler secret put`, never committed here:
 #   ANTHROPIC_API_KEY  - your Claude API key
