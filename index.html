@@ -3,14 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Claude</title>
+<title>Prism</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23c96442'/%3E%3Cpath d='M16 6l2.6 8.4L27 17l-8.4 2.6L16 28l-2.6-8.4L5 17l8.4-2.6z' fill='white'/%3E%3C/svg%3E" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div id="gate" class="gate">
   <form id="gate-form" class="gate-card">
-    <div class="gate-mark">✦</div>
+    <div class="gate-mark">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+    </div>
     <h1>Enter access code</h1>
     <p class="gate-sub">This chat is private. Enter your access code to continue.</p>
     <input id="gate-input" type="password" autocomplete="off" placeholder="Access code" />
@@ -23,10 +26,12 @@
   <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <span class="brand-mark">✦</span>
-      <span class="brand-name">Claude</span>
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+      </span>
+      <span class="brand-name">Prism</span>
     </div>
-    <button id="new-chat" class="new-chat-btn">
+    <button id="new-chat" class="new-chat-btn" title="Start a new chat">
       <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
       New chat
     </button>
@@ -39,7 +44,7 @@
 
   <main class="main">
     <div class="topbar">
-      <button id="menu-toggle" class="icon-btn" aria-label="Toggle sidebar">
+      <button id="menu-toggle" class="icon-btn" aria-label="Toggle sidebar" title="Toggle sidebar">
         <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
       </button>
       <div class="topbar-right">
@@ -57,7 +62,7 @@
             High
           </button>
         </div>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
           <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-15a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 18a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zM4.22 4.22a1 1 0 0 1 1.42 0l1.41 1.41a1 1 0 1 1-1.41 1.42L4.22 5.64a1 1 0 0 1 0-1.42zm14.14 14.14a1 1 0 0 1 1.41 0l1.41 1.41a1 1 0 1 1-1.41 1.41l-1.41-1.41a1 1 0 0 1 0-1.41zM1 12a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2H2a1 1 0 0 1-1-1zm18 0a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1zM4.22 19.78a1 1 0 0 1 0-1.41l1.41-1.41a1 1 0 1 1 1.42 1.41l-1.41 1.41a1 1 0 0 1-1.42 0zM18.36 5.64a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 1 1 1.41 1.41l-1.41 1.42a1 1 0 0 1-1.41 0z"/></svg>
           <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
@@ -67,7 +72,7 @@
     <div id="messages" class="messages"></div>
 
     <form id="composer" class="composer">
-      <textarea id="input" rows="1" placeholder="Message Claude..." autofocus></textarea>
+      <textarea id="input" rows="1" placeholder="Message Prism..." autofocus></textarea>
       <button id="send" type="submit" aria-label="Send">
         <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M4 12l16-8-6 8 6 8-16-8z"/></svg>
       </button>
