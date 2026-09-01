@@ -77,7 +77,7 @@
 
   function getEffort() {
     const stored = localStorage.getItem(EFFORT_KEY);
-    return stored === "low" || stored === "medium" || stored === "high" ? stored : "high";
+    return stored === "low" || stored === "medium" || stored === "high" ? stored : "low";
   }
 
   function setEffort(effort) {

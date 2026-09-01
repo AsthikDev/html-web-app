@@ -47,7 +47,7 @@ export default {
       return new Response("messages required", { status: 400, headers: cors });
     }
 
-    const effort = body.effort === "low" || body.effort === "medium" ? body.effort : "high";
+    const effort = body.effort === "medium" || body.effort === "high" ? body.effort : "low";
 
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
 
