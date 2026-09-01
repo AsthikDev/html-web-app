@@ -7,7 +7,7 @@ export interface Env {
 }
 
 const SYSTEM_PROMPT = "You are Claude, a helpful AI assistant.";
-const MODEL = "claude-opus-5";
+const MODEL = "claude-sonnet-5";
 const MAX_TOKENS = 16000;
 
 function corsHeaders(origin: string, allowedOrigin: string): Record<string, string> {
